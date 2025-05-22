@@ -1,4 +1,3 @@
-
 "use client"
 
 import React from "react"
@@ -29,8 +28,6 @@ const SummaryCards = () => {
     selectTicketsByCategory("status", "Closed")
   }
 
-  // MODIFIED: getActiveFilters to always show all filter categories,
-  // indicating "All" if no specific filter is applied.
   const getActiveFilters = () => {
     const activeFilters = []
 
@@ -78,7 +75,6 @@ const SummaryCards = () => {
         </div>
         <Badge variant="outline" className="px-3 py-1.5 gap-1.5 self-start">
           <Filter className="h-3.5 w-3.5" />
-          {/* The count will now always be the number of filter categories (e.g., 5) */}
           <span>{activeFilters.length} active filters</span>
         </Badge>
       </div>
@@ -113,23 +109,25 @@ const SummaryCards = () => {
         </div>
       </div>
 
-      {/* MODIFIED: Removed the activeFilters.length > 0 condition */}
       <Card className="overflow-hidden border-none shadow-md bg-gradient-to-r from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+        {/* Reset CardContent padding to p-0, and apply padding to its children */}
         <CardContent className="p-0">
-          <div className="p-4 border-b border-border/50 bg-muted/30 dark:bg-muted/10">
-            <h3 className="text-sm font-medium flex items-center gap-2">
-              <Filter className="h-4 w-4 text-muted-foreground" />
+          {/* Header section with increased padding and bold font */}
+          <div className="p-4 sm:p-6 border-b border-border/50 bg-muted/30 dark:bg-muted/10">
+            <h3 className="text-base sm:text-lg font-medium flex items-center gap-2">
+              <Filter className="h-5 w-5 text-muted-foreground" />
               Active Filters
             </h3>
           </div>
-          <div className="p-4 flex flex-wrap gap-3">
+          {/* Content section with increased padding and larger filter values */}
+          <div className="p-4 sm:p-6 flex flex-wrap gap-4">
             {activeFilters.map((filter, index) => (
               <div
                 key={index}
-                className="flex flex-col px-4 py-2 rounded-lg border border-border/50 bg-background dark:bg-gray-800 hover:shadow-sm transition-all"
+                className="flex flex-col px-5 py-3 rounded-lg border border-border/50 bg-background dark:bg-gray-800 hover:shadow-sm transition-all"
               >
                 <span className="text-xs uppercase tracking-wider text-muted-foreground">{filter.label}</span>
-                <span className="text-sm font-semibold">{filter.value}</span>
+                <span className="text-base sm:text-lg font-semibold">{filter.value}</span>
               </div>
             ))}
           </div>
