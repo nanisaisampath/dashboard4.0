@@ -1,0 +1,30 @@
+
+/* Custom hover styles for charts */
+.recharts-bar:hover .bar-label {
+  opacity: 1 !important;
+  transition: opacity 0.3s ease;
+}
+
+.recharts-bar .bar-label {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Enhanced tooltip styles */
+.custom-tooltip {
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  font-size: 0.875rem;
+}
+
+.custom-tooltip .label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.custom-tooltip .intro {
+  color: #4b5563;
+}
