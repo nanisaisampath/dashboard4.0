@@ -1,10 +1,10 @@
-// SummaryCards.tsx
+
 "use client"
 
 import React from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { useDashboard } from "@/context/DashboardContext"
-import { calculateMetrics } from "@/utils/dataProcessor" // Assuming this utility exists
+import { calculateMetrics } from "@/utils/dataProcessor"
 import { Badge } from "@/components/ui/badge"
 import { Ticket, CheckCircle, AlertCircle, Filter } from "lucide-react"
 
@@ -12,46 +12,57 @@ const SummaryCards = () => {
   const { filteredData, isLoading, filters, selectTicketsByCategory } = useDashboard()
 
   const metrics = React.useMemo(() => {
-    if (!filteredData) return {
-      totalTickets: 0,
-      openTickets: 0,
-      resolvedTickets: 0,
-    }
-
+    if (!filteredData)
+      return {
+        totalTickets: 0,
+        openTickets: 0,
+        resolvedTickets: 0,
+      }
     return calculateMetrics(filteredData)
   }, [filteredData])
 
-  // Call selectTicketsByCategory with lowercase keys to match your dataProcessor
   const handleOpenTicketsClick = () => {
-    selectTicketsByCategory("status", "Open")  // "Open" handled inside context filtering
+    selectTicketsByCategory("status", "Open")
   }
 
   const handleResolvedTicketsClick = () => {
-    selectTicketsByCategory("status", "Closed") // "Closed" handled inside context filtering
+    selectTicketsByCategory("status", "Closed")
   }
 
+  // MODIFIED: getActiveFilters to always show all filter categories,
+  // indicating "All" if no specific filter is applied.
   const getActiveFilters = () => {
     const activeFilters = []
 
-    if (filters.technology && filters.technology !== "All") {
-      activeFilters.push({ label: "Technology", value: filters.technology })
-    }
+    // Technology Filter
+    activeFilters.push({
+      label: "Technology",
+      value: filters.technology && filters.technology !== "All" ? filters.technology : "All"
+    })
 
-    if (filters.client && filters.client !== "All") {
-      activeFilters.push({ label: "Client", value: filters.client })
-    }
+    // Client Filter
+    activeFilters.push({
+      label: "Client",
+      value: filters.client && filters.client !== "All" ? filters.client : "All"
+    })
 
-    if (filters.ticketType && filters.ticketType !== "All") {
-      activeFilters.push({ label: "Ticket Type", value: filters.ticketType })
-    }
+    // Ticket Type Filter
+    activeFilters.push({
+      label: "Ticket Type",
+      value: filters.ticketType && filters.ticketType !== "All" ? filters.ticketType : "All"
+    })
 
-    if (filters.status && filters.status !== "All") {
-      activeFilters.push({ label: "Status", value: filters.status })
-    }
+    // Status Filter
+    activeFilters.push({
+      label: "Status",
+      value: filters.status && filters.status !== "All" ? filters.status : "All"
+    })
 
-    if (filters.assignedTo && filters.assignedTo !== "All") {
-      activeFilters.push({ label: "Assigned To", value: filters.assignedTo })
-    }
+    // Assigned To Filter
+    activeFilters.push({
+      label: "Assigned To",
+      value: filters.assignedTo && filters.assignedTo !== "All" ? filters.assignedTo : "All"
+    })
 
     return activeFilters
   }
@@ -67,13 +78,12 @@ const SummaryCards = () => {
         </div>
         <Badge variant="outline" className="px-3 py-1.5 gap-1.5 self-start">
           <Filter className="h-3.5 w-3.5" />
+          {/* The count will now always be the number of filter categories (e.g., 5) */}
           <span>{activeFilters.length} active filters</span>
         </Badge>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Total Tickets - No specific click action to open panel for all tickets,
-            as the panel is for categorized views. You could add one if desired. */}
         <MetricCard
           title="Total Tickets"
           value={isLoading ? "..." : metrics.totalTickets}
@@ -82,7 +92,6 @@ const SummaryCards = () => {
           iconColor="text-violet-500 dark:text-violet-400"
         />
 
-        {/* Open Tickets Card - Clickable to show open tickets in the panel */}
         <div onClick={handleOpenTicketsClick} className="cursor-pointer">
           <MetricCard
             title="Open Tickets"
@@ -93,7 +102,6 @@ const SummaryCards = () => {
           />
         </div>
 
-        {/* Resolved Tickets Card - Clickable to show resolved tickets in the panel */}
         <div onClick={handleResolvedTicketsClick} className="cursor-pointer">
           <MetricCard
             title="Resolved Tickets"
@@ -105,29 +113,28 @@ const SummaryCards = () => {
         </div>
       </div>
 
-      {activeFilters.length > 0 && (
-        <Card className="overflow-hidden border-none shadow-md bg-gradient-to-r from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
-          <CardContent className="p-0">
-            <div className="p-4 border-b border-border/50 bg-muted/30 dark:bg-muted/10">
-              <h3 className="text-sm font-medium flex items-center gap-2">
-                <Filter className="h-4 w-4 text-muted-foreground" />
-                Active Filters
-              </h3>
-            </div>
-            <div className="p-4 flex flex-wrap gap-3">
-              {activeFilters.map((filter, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col px-4 py-2 rounded-lg border border-border/50 bg-background dark:bg-gray-800 hover:shadow-sm transition-all"
-                >
-                  <span className="text-xs uppercase tracking-wider text-muted-foreground">{filter.label}</span>
-                  <span className="text-sm font-semibold">{filter.value}</span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      {/* MODIFIED: Removed the activeFilters.length > 0 condition */}
+      <Card className="overflow-hidden border-none shadow-md bg-gradient-to-r from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+        <CardContent className="p-0">
+          <div className="p-4 border-b border-border/50 bg-muted/30 dark:bg-muted/10">
+            <h3 className="text-sm font-medium flex items-center gap-2">
+              <Filter className="h-4 w-4 text-muted-foreground" />
+              Active Filters
+            </h3>
+          </div>
+          <div className="p-4 flex flex-wrap gap-3">
+            {activeFilters.map((filter, index) => (
+              <div
+                key={index}
+                className="flex flex-col px-4 py-2 rounded-lg border border-border/50 bg-background dark:bg-gray-800 hover:shadow-sm transition-all"
+              >
+                <span className="text-xs uppercase tracking-wider text-muted-foreground">{filter.label}</span>
+                <span className="text-sm font-semibold">{filter.value}</span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
