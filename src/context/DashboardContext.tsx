@@ -60,7 +60,7 @@ export const DashboardContext = createContext<DashboardContextType>({} as Dashbo
 
 // --- Provider Component ---
 export const DashboardProvider = ({ children }: { children: ReactNode }) => {
-  const defaultStartDate = addMonths(new Date(), -2);
+  const defaultStartDate = addMonths(new Date(), -3);
   const defaultEndDate = new Date();
 
   const [rawData, setRawData] = useState<any[] | null>(null);
